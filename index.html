@@ -55,30 +55,37 @@
         <h2>Traffic count</h2>
         <p>Tap the correct vehicle/person type as it passes.</p>
       </div>
-      <div class="direction-toggle" role="group" aria-label="Direction">
-        <button class="direction active" data-direction="Direction 1" type="button">Direction 1</button>
-        <button class="direction" data-direction="Direction 2" type="button">Direction 2</button>
+      <div class="direction-mode" role="group" aria-label="Number of directions">
+        <button class="mode-btn active" data-mode="one" type="button">One direction</button>
+        <button class="mode-btn" data-mode="two" type="button">Two directions</button>
       </div>
     </div>
 
-    <div class="total-strip">
-      <span>Current direction total</span>
-      <strong id="directionTotal">0</strong>
-    </div>
-
-    <div class="count-grid">
-      <button class="count-btn car" data-type="Cars" type="button">
-        <span class="icon">🚗</span><span>Cars</span><strong id="cars">0</strong>
-      </button>
-      <button class="count-btn hgv" data-type="HGVs" type="button">
-        <span class="icon">🚛</span><span>HGVs</span><strong id="hgvs">0</strong>
-      </button>
-      <button class="count-btn pedestrian" data-type="Pedestrians" type="button">
-        <span class="icon">🚶</span><span>Pedestrians</span><strong id="pedestrians">0</strong>
-      </button>
-      <button class="count-btn cycle" data-type="Cycles" type="button">
-        <span class="icon">🚲</span><span>Cycles</span><strong id="cycles">0</strong>
-      </button>
+    <div id="directionPanels" class="direction-panels">
+      <div class="direction-panel" data-panel="Direction 1">
+        <div class="direction-title">
+          <input class="direction-name" data-direction-name="Direction 1" type="text" value="Eastbound" aria-label="Direction 1 name" maxlength="40">
+          <strong class="panel-total" data-panel-total="Direction 1">0</strong>
+        </div>
+        <div class="count-grid">
+          <button class="count-btn car" data-direction="Direction 1" data-type="Cars" type="button"><span class="icon">🚗</span><span>Cars</span><strong data-count="Direction 1-Cars">0</strong></button>
+          <button class="count-btn hgv" data-direction="Direction 1" data-type="HGVs" type="button"><span class="icon">🚛</span><span>HGVs</span><strong data-count="Direction 1-HGVs">0</strong></button>
+          <button class="count-btn pedestrian" data-direction="Direction 1" data-type="Pedestrians" type="button"><span class="icon">🚶</span><span>Pedestrians</span><strong data-count="Direction 1-Pedestrians">0</strong></button>
+          <button class="count-btn cycle" data-direction="Direction 1" data-type="Cycles" type="button"><span class="icon">🚲</span><span>Cycles</span><strong data-count="Direction 1-Cycles">0</strong></button>
+        </div>
+      </div>
+      <div class="direction-panel second-panel" data-panel="Direction 2">
+        <div class="direction-title">
+          <input class="direction-name" data-direction-name="Direction 2" type="text" value="Westbound" aria-label="Direction 2 name" maxlength="40">
+          <strong class="panel-total" data-panel-total="Direction 2">0</strong>
+        </div>
+        <div class="count-grid">
+          <button class="count-btn car" data-direction="Direction 2" data-type="Cars" type="button"><span class="icon">🚗</span><span>Cars</span><strong data-count="Direction 2-Cars">0</strong></button>
+          <button class="count-btn hgv" data-direction="Direction 2" data-type="HGVs" type="button"><span class="icon">🚛</span><span>HGVs</span><strong data-count="Direction 2-HGVs">0</strong></button>
+          <button class="count-btn pedestrian" data-direction="Direction 2" data-type="Pedestrians" type="button"><span class="icon">🚶</span><span>Pedestrians</span><strong data-count="Direction 2-Pedestrians">0</strong></button>
+          <button class="count-btn cycle" data-direction="Direction 2" data-type="Cycles" type="button"><span class="icon">🚲</span><span>Cycles</span><strong data-count="Direction 2-Cycles">0</strong></button>
+        </div>
+      </div>
     </div>
 
     <div class="overall">

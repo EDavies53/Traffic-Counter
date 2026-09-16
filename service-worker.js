@@ -1,4 +1,4 @@
-const CACHE_NAME = "traffic-count-v1";
+const CACHE_NAME = "traffic-count-v2";
 const FILES = [
   "./",
   "./index.html",

@@ -14,7 +14,8 @@ let state = {
   running: false,
   paused: false,
   finished: false,
-  activeDirection: "Direction 1",
+  directionMode: "one",
+  directionNames: { "Direction 1": "Eastbound", "Direction 2": "Westbound" },
   counts: {
     "Direction 1": { Cars: 0, HGVs: 0, Pedestrians: 0, Cycles: 0 },
     "Direction 2": { Cars: 0, HGVs: 0, Pedestrians: 0, Cycles: 0 }
@@ -79,10 +80,19 @@ function render() {
     $(allId).textContent = totalForType(type);
   });
 
-  $("directionTotal").textContent = totalForDirection(state.activeDirection);
-
-  document.querySelectorAll(".direction").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.direction === state.activeDirection);
+  document.querySelectorAll(".mode-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.mode === state.directionMode);
+  });
+  document.querySelector(".second-panel").classList.toggle("hidden", state.directionMode !== "two");
+  document.querySelectorAll(".direction-name").forEach(input => {
+    input.value = state.directionNames[input.dataset.directionName];
+  });
+  document.querySelectorAll(".panel-total").forEach(el => {
+    el.textContent = totalForDirection(el.dataset.panelTotal);
+  });
+  document.querySelectorAll("[data-count]").forEach(el => {
+    const [direction, type] = el.dataset.count.split("-");
+    el.textContent = state.counts[direction][type];
   });
 
   $("startBtn").disabled = state.running || state.finished;
@@ -147,7 +157,8 @@ function resetSurvey(confirmIt = true) {
     running: false,
     paused: false,
     finished: false,
-    activeDirection: "Direction 1",
+    directionMode: "one",
+    directionNames: { "Direction 1": "Eastbound", "Direction 2": "Westbound" },
     counts: {
       "Direction 1": { Cars: 0, HGVs: 0, Pedestrians: 0, Cycles: 0 },
       "Direction 2": { Cars: 0, HGVs: 0, Pedestrians: 0, Cycles: 0 }
@@ -156,12 +167,12 @@ function resetSurvey(confirmIt = true) {
   render();
 }
 
-function increment(type) {
+function increment(direction, type) {
   if (!state.running) {
     showMessage("Start the 3-minute count before recording traffic.");
     return;
   }
-  state.counts[state.activeDirection][type]++;
+  state.counts[direction][type]++;
   render();
 }
 
@@ -173,6 +184,8 @@ function makeSurvey() {
     siteRef: state.siteRef,
     address: state.address,
     notes: state.notes,
+    directionMode: state.directionMode,
+    directionNames: { ...state.directionNames },
     date: state.date || today(),
     startTime: state.startTime || "",
     durationSeconds: Math.min(180, state.elapsedSeconds),
@@ -243,6 +256,8 @@ async function loadSurvey(id) {
   state.siteRef = survey.siteRef || "";
   state.address = survey.address || "";
   state.notes = survey.notes || "";
+  state.directionMode = survey.directionMode || "one";
+  state.directionNames = survey.directionNames || { "Direction 1": "Eastbound", "Direction 2": "Westbound" };
   state.date = survey.date || "";
   state.startTime = survey.startTime || "";
   state.elapsedSeconds = Math.min(180, Number(survey.durationSeconds) || 0);
@@ -292,7 +307,7 @@ async function exportCsv() {
     return;
   }
   const header = [
-    "Site Reference","Address","Notes","Date","Start Time","Duration (s)",
+    "Site Reference","Address","Notes","Direction Mode","Direction 1","Direction 2","Date","Start Time","Duration (s)",
     "Direction 1 Cars","Direction 1 HGVs","Direction 1 Pedestrians","Direction 1 Cycles",
     "Direction 2 Cars","Direction 2 HGVs","Direction 2 Pedestrians","Direction 2 Cycles",
     "Total Cars","Total HGVs","Total Pedestrians","Total Cycles","Grand Total"
@@ -300,7 +315,10 @@ async function exportCsv() {
   const rows = surveys.map(s => {
     const d1 = s.counts["Direction 1"], d2 = s.counts["Direction 2"];
     const vals = [
-      s.siteRef,s.address,s.notes,s.date,s.startTime,s.durationSeconds,
+      s.siteRef,s.address,s.notes,s.directionMode || "one",
+      s.directionNames?.["Direction 1"] || "Eastbound",
+      s.directionNames?.["Direction 2"] || "Westbound",
+      s.date,s.startTime,s.durationSeconds,
       d1.Cars,d1.HGVs,d1.Pedestrians,d1.Cycles,
       d2.Cars,d2.HGVs,d2.Pedestrians,d2.Cycles,
       ...COUNT_TYPES.map(t => (d1[t]||0)+(d2[t]||0)),
@@ -341,14 +359,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("exportAllBtn").addEventListener("click", exportCsv);
 
   document.querySelectorAll(".count-btn").forEach(btn => {
-    btn.addEventListener("click", () => increment(btn.dataset.type));
+    btn.addEventListener("click", () => increment(btn.dataset.direction, btn.dataset.type));
   });
 
-  document.querySelectorAll(".direction").forEach(btn => {
+  document.querySelectorAll(".mode-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      state.activeDirection = btn.dataset.direction;
+      state.directionMode = btn.dataset.mode;
       render();
     });
+  });
+
+  document.querySelectorAll(".direction-name").forEach(input => {
+    input.addEventListener("input", () => {
+      state.directionNames[input.dataset.directionName] = input.value.trim();
+    });
+    input.addEventListener("blur", render);
   });
 
   $("savedList").addEventListener("click", async e => {
