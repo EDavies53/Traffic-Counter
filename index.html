@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172033">
+  <meta name="description" content="Simple three-minute traffic count tool">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>Traffic Count</title>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div>
+        <h1>Traffic Count</h1>
+        <p>3-minute traffic survey</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Survey details</h2>
+      <div class="form-grid">
+        <label>
+          Site reference
+          <input id="siteReference" type="text" autocomplete="off" placeholder="e.g. 07J24">
+        </label>
+        <label>
+          Address / location
+          <input id="address" type="text" autocomplete="street-address" placeholder="e.g. Stock Road">
+        </label>
+        <label class="full">
+          Notes
+          <textarea id="notes" rows="2" placeholder="Optional notes"></textarea>
+        </label>
+      </div>
+      <div class="survey-meta">
+        <span>Date: <b id="surveyDate">Not started</b></span>
+        <span>Start: <b id="surveyStart">Not started</b></span>
+      </div>
+    </section>
+
+    <section class="card timer-card">
+      <div class="small-title">TIME REMAINING</div>
+      <div id="timer" class="timer" aria-live="polite">03:00</div>
+      <div id="timerStatus" class="timer-status">Ready</div>
+      <div class="timer-buttons">
+        <button id="startButton" class="primary" type="button">START 3:00</button>
+        <button id="pauseButton" class="secondary" type="button" disabled>PAUSE</button>
+        <button id="resetButton" class="danger" type="button">RESET</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="count-heading">
+        <div>
+          <h2>Traffic movements</h2>
+          <p>Choose how many directions you are counting.</p>
+        </div>
+        <div class="mode-buttons">
+          <button id="oneDirectionButton" class="mode active" type="button">1 Direction</button>
+          <button id="twoDirectionButton" class="mode" type="button">2 Directions</button>
+        </div>
+      </div>
+
+      <div id="directions" class="directions one-direction">
+        <article class="direction" id="direction1">
+          <div class="direction-header">
+            <label>
+              Direction of travel
+              <input class="direction-input" id="direction1Name" type="text" value="Eastbound" maxlength="40">
+            </label>
+            <div class="direction-total">
+              <span>Total</span>
+              <b id="direction1Total">0</b>
+            </div>
+          </div>
+
+          <div class="traffic-buttons">
+            <button class="traffic car" data-direction="1" data-type="cars" type="button">
+              <span>🚗</span><strong>Cars</strong><b id="d1cars">0</b>
+            </button>
+            <button class="traffic hgv" data-direction="1" data-type="hgv" type="button">
+              <span>🚛</span><strong>HGVs</strong><b id="d1hgv">0</b>
+            </button>
+            <button class="traffic pedestrian" data-direction="1" data-type="pedestrians" type="button">
+              <span>🚶</span><strong>Pedestrians</strong><b id="d1pedestrians">0</b>
+            </button>
+            <button class="traffic cycle" data-direction="1" data-type="cycles" type="button">
+              <span>🚲</span><strong>Cycles</strong><b id="d1cycles">0</b>
+            </button>
+          </div>
+        </article>
+
+        <article class="direction hidden" id="direction2">
+          <div class="direction-header">
+            <label>
+              Direction of travel
+              <input class="direction-input" id="direction2Name" type="text" value="Westbound" maxlength="40">
+            </label>
+            <div class="direction-total">
+              <span>Total</span>
+              <b id="direction2Total">0</b>
+            </div>
+          </div>
+
+          <div class="traffic-buttons">
+            <button class="traffic car" data-direction="2" data-type="cars" type="button">
+              <span>🚗</span><strong>Cars</strong><b id="d2cars">0</b>
+            </button>
+            <button class="traffic hgv" data-direction="2" data-type="hgv" type="button">
+              <span>🚛</span><strong>HGVs</strong><b id="d2hgv">0</b>
+            </button>
+            <button class="traffic pedestrian" data-direction="2" data-type="pedestrians" type="button">
+              <span>🚶</span><strong>Pedestrians</strong><b id="d2pedestrians">0</b>
+            </button>
+            <button class="traffic cycle" data-direction="2" data-type="cycles" type="button">
+              <span>🚲</span><strong>Cycles</strong><b id="d2cycles">0</b>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <div class="overall">
+        <h3>Overall totals</h3>
+        <div class="overall-grid">
+          <div><span>Cars</span><b id="totalCars">0</b></div>
+          <div><span>HGVs</span><b id="totalHgv">0</b></div>
+          <div><span>Pedestrians</span><b id="totalPedestrians">0</b></div>
+          <div><span>Cycles</span><b id="totalCycles">0</b></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="main-actions">
+      <button id="saveButton" class="primary large" type="button">SAVE SURVEY</button>
+      <button id="newButton" class="secondary large" type="button">NEW SURVEY</button>
+    </div>
+
+    <section class="card">
+      <div class="saved-header">
+        <div>
+          <h2>Saved surveys</h2>
+          <p>Saved locally on this device.</p>
+        </div>
+        <button id="exportButton" class="secondary" type="button">EXPORT CSV</button>
+      </div>
+      <div id="savedSurveys" class="saved-surveys">
+        <p class="empty">No saved surveys.</p>
+      </div>
+    </section>
+
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Traffic Count Tool",
+  "short_name": "Traffic Count",
+  "description": "Three-minute manual traffic count tool",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef1f5",
+  "theme_color": "#172033"
+}
