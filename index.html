@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Three-minute traffic count survey tool">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>Traffic Count Tool</title>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div>
+      <h1>Traffic Count</h1>
+      <p>3-minute manual traffic survey</p>
+    </div>
+    <button id="installBtn" class="secondary hidden" type="button">Install</button>
+  </header>
+
+  <section class="card survey-info">
+    <h2>Survey details</h2>
+    <div class="form-grid">
+      <label>Site reference
+        <input id="siteRef" type="text" placeholder="e.g. 07J24" autocomplete="off">
+      </label>
+      <label>Address / location
+        <input id="address" type="text" placeholder="e.g. Stock Road, Chelmsford" autocomplete="street-address">
+      </label>
+      <label class="full">Notes
+        <textarea id="notes" rows="2" placeholder="Optional notes"></textarea>
+      </label>
+    </div>
+    <div class="meta">
+      <span>Date: <strong id="dateDisplay">-</strong></span>
+      <span>Start time: <strong id="timeDisplay">Not started</strong></span>
+    </div>
+  </section>
+
+  <section class="card timer-card">
+    <div class="timer-label">COUNTDOWN</div>
+    <div id="timer" class="timer" aria-live="polite">03:00</div>
+    <div id="status" class="status">Ready to start</div>
+    <div class="timer-actions">
+      <button id="startBtn" class="primary" type="button">START 3:00</button>
+      <button id="pauseBtn" class="secondary" type="button" disabled>PAUSE</button>
+      <button id="resetBtn" class="danger" type="button">RESET</button>
+    </div>
+  </section>
+
+  <section class="card count-card">
+    <div class="count-header">
+      <div>
+        <h2>Traffic count</h2>
+        <p>Tap the correct vehicle/person type as it passes.</p>
+      </div>
+      <div class="direction-toggle" role="group" aria-label="Direction">
+        <button class="direction active" data-direction="Direction 1" type="button">Direction 1</button>
+        <button class="direction" data-direction="Direction 2" type="button">Direction 2</button>
+      </div>
+    </div>
+
+    <div class="total-strip">
+      <span>Current direction total</span>
+      <strong id="directionTotal">0</strong>
+    </div>
+
+    <div class="count-grid">
+      <button class="count-btn car" data-type="Cars" type="button">
+        <span class="icon">🚗</span><span>Cars</span><strong id="cars">0</strong>
+      </button>
+      <button class="count-btn hgv" data-type="HGVs" type="button">
+        <span class="icon">🚛</span><span>HGVs</span><strong id="hgvs">0</strong>
+      </button>
+      <button class="count-btn pedestrian" data-type="Pedestrians" type="button">
+        <span class="icon">🚶</span><span>Pedestrians</span><strong id="pedestrians">0</strong>
+      </button>
+      <button class="count-btn cycle" data-type="Cycles" type="button">
+        <span class="icon">🚲</span><span>Cycles</span><strong id="cycles">0</strong>
+      </button>
+    </div>
+
+    <div class="overall">
+      <h3>Overall total</h3>
+      <div class="overall-grid">
+        <div><span>Cars</span><strong id="allCars">0</strong></div>
+        <div><span>HGVs</span><strong id="allHgvs">0</strong></div>
+        <div><span>Pedestrians</span><strong id="allPedestrians">0</strong></div>
+        <div><span>Cycles</span><strong id="allCycles">0</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="actions">
+    <button id="saveBtn" class="primary wide" type="button">SAVE SURVEY</button>
+    <button id="newBtn" class="secondary wide" type="button">NEW SURVEY</button>
+  </section>
+
+  <section class="card saved-card">
+    <div class="saved-heading">
+      <div>
+        <h2>Saved surveys</h2>
+        <p>Stored on this device.</p>
+      </div>
+      <button id="exportAllBtn" class="secondary" type="button">EXPORT CSV</button>
+    </div>
+    <div id="savedList" class="saved-list">
+      <div class="empty">No saved surveys yet.</div>
+    </div>
+  </section>
+
+  <p id="message" class="message" role="status" aria-live="polite"></p>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
